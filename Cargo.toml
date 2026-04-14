@@ -1,0 +1,24 @@
+[workspace]
+members = [
+    "java-to-go-projects/02-calculator/rust",
+    "java-to-go-projects/03-todo-list/rust",
+    "java-to-go-projects/04-log-parser/rust",
+    "java-to-go-projects/17-kv-store/rust",
+]
+# Add these as you create src/main.rs for each:
+# "java-to-go-projects/05-port-scanner/rust",
+# "java-to-go-projects/06-json-config-merger/rust",
+# "java-to-go-projects/07-concurrent-downloader/rust",
+# "java-to-go-projects/08-cli-task-runner/rust",
+# "java-to-go-projects/09-markdown-to-html/rust",
+# "java-to-go-projects/10-tcp-chat-server/rust",
+# "java-to-go-projects/11-worker-pool/rust",
+# "java-to-go-projects/12-rate-limiter/rust",
+# "java-to-go-projects/13-event-emitter/rust",
+# "java-to-go-projects/14-http-proxy/rust",
+# "java-to-go-projects/15-csv-to-json/rust",
+# "java-to-go-projects/16-cron-parser/rust",
+# "java-to-go-projects/18-pipeline/rust",
+# "java-to-go-projects/19-graceful-server/rust",
+# "java-to-go-projects/20-load-balancer/rust",
+resolver = "2"

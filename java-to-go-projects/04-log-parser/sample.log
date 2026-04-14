@@ -1,0 +1,10 @@
+[2024-01-15 10:23:45] ERROR /api/users - Connection timeout
+[2024-01-15 10:24:01] INFO /api/health - OK
+[2024-01-15 10:24:15] WARN /api/orders - Slow query (2.3s)
+[2024-01-15 10:25:00] ERROR /api/users - Connection timeout
+[2024-01-15 10:25:30] INFO /api/health - OK
+[2024-01-15 10:26:00] ERROR /api/payments - Card declined
+[2024-01-15 10:26:45] INFO /api/users - User created
+[2024-01-15 10:27:00] WARN /api/orders - Slow query (3.1s)
+[2024-01-15 10:28:00] INFO /api/health - OK
+[2024-01-15 10:29:00] ERROR /api/orders - Database connection lost
