@@ -1,152 +1,186 @@
-# Java Spring Boot → Go Conversion Projects
+# Java → Go + Rust Conversion Projects
 
-20 progressively challenging Spring Boot projects to convert to Go. Each teaches core Go concepts.
-
----
-
-## Go Concepts You'll Practice
-
-| Java / Spring           | Go Equivalent                                  |
-|-------------------------|------------------------------------------------|
-| `@RestController`       | `http.HandleFunc` / `net/http` or Gin/Chi      |
-| `@RequestBody`          | `json.NewDecoder(r.Body).Decode(&v)`           |
-| `@PathVariable`         | URL parsing / router params                    |
-| `@RequestParam`         | `r.URL.Query().Get("param")`                   |
-| `HashMap<K,V>`          | `map[K]V`                                      |
-| `List<T>`               | `[]T` (slice)                                  |
-| `Optional`              | Multiple return values `(T, error)`            |
-| `class` + getters       | `struct` + exported fields                     |
-| `AtomicLong`            | `sync/atomic` or `sync.Mutex`                  |
-| `LocalDateTime.now()`   | `time.Now()`                                   |
+20 progressively challenging projects, each with a Java reference implementation to convert to **Go** and **Rust**. Projects range from basic HTTP servers to concurrent systems and network tools.
 
 ---
 
-## Projects (Beginner → Intermediate)
+## Project Structure
 
-### 01 - Hello World API
-**Files:** `HelloWorldApplication.java`
-**Concepts:** Basic HTTP server, query params, routing
-**Go tip:** Use `net/http` standard library only — no framework needed.
-
-### 02 - Calculator API
-**Files:** `CalculatorController.java`
-**Concepts:** Query params, arithmetic, error responses
-**Go tip:** `strconv.ParseFloat()` to parse query params.
-
-### 03 - Todo List CRUD
-**Files:** `Todo.java`, `TodoController.java`
-**Concepts:** Full CRUD, in-memory map, JSON body, path variables
-**Go tip:** Use a `map[int64]Todo` + `sync.Mutex` for thread safety.
-
-### 04 - Student Grade Calculator
-**Files:** `Student.java`, `GradeController.java`
-**Concepts:** Structs with methods, slices, computed fields
-**Go tip:** Methods on structs: `func (s Student) Average() float64 { ... }`
-
-### 05 - Bank Account
-**Files:** `BankAccount.java`, `BankController.java`
-**Concepts:** State mutation, validation, error strings
-**Go tip:** Return `(result string, err error)` instead of string-only errors.
-
-### 06 - Library Catalog
-**Files:** `Book.java`, `LibraryController.java`
-**Concepts:** Search/filter with slices, boolean state, query params
-**Go tip:** Use `strings.Contains()` for case-insensitive search with `strings.ToLower()`.
-
-### 07 - Weather API (Mock Data)
-**Files:** `WeatherController.java`
-**Concepts:** Pre-seeded data maps, nested maps, missing key handling
-**Go tip:** Use `struct` instead of `map[string]interface{}` for typed weather data.
-
-### 08 - User Auth (Token-based)
-**Files:** `User.java`, `AuthController.java`
-**Concepts:** Request headers, UUID tokens, session maps, password hashing
-**Go tip:** Use `crypto/sha256` for hashing; read headers with `r.Header.Get("Authorization")`.
-
-### 09 - Inventory Manager
-**Files:** `Product.java`, `InventoryController.java`
-**Concepts:** PATCH operations, computed totals, threshold filtering
-**Go tip:** Range over maps: `for id, product := range products { ... }`
-
-### 10 - Blog API
-**Files:** `Post.java`, `BlogController.java`
-**Concepts:** Nested slices (comments, tags), filter by tag, timestamps
-**Go tip:** `time.Time` for timestamps; embed slices in structs.
-
-### 11 - Quiz App
-**Files:** `Quiz.java`, `QuizController.java`
-**Concepts:** Pre-seeded data, answer checking, filtering by category
-**Go tip:** Use `iota` or typed constants for categories.
-
-### 12 - Expense Tracker
-**Files:** `Expense.java`, `ExpenseController.java`
-**Concepts:** Aggregation/grouping, filter by category, delete by ID
-**Go tip:** Build a summary map: `map[string]float64` for per-category totals.
-
-### 13 - Chat Messages
-**Files:** `Message.java`, `ChatController.java`
-**Concepts:** Multi-field filtering, mark-as-read mutation, conversation threads
-**Go tip:** Sort a slice with `sort.Slice(msgs, func(i, j int) bool { ... })`.
-
-### 14 - Product Catalog
-**Files:** `Product.java`, `CatalogController.java`
-**Concepts:** Multi-param filtering, dynamic sorting, running average for ratings
-**Go tip:** Chain filters by appending to a results slice inside a loop.
-
-### 15 - File Uploader
-**Files:** `FileMetadata.java`, `FileController.java`
-**Concepts:** Multipart form uploads, disk I/O, file registry
-**Go tip:** Use `r.FormFile("file")` and `io.Copy()` to save to disk.
-
-### 16 - Email Sender (Simulated)
-**Files:** `EmailRequest.java`, `EmailController.java`
-**Concepts:** Slice of recipients, bulk operations, audit log
-**Go tip:** Validate with early returns; build log entries as structs.
-
-### 17 - Job Scheduler
-**Files:** `Job.java`, `SchedulerController.java`
-**Concepts:** Enums (iota), status state machine, manual trigger simulation
-**Go tip:** Use `const` with `iota` for job status; `time.Now().Add()` for next run.
-
-### 18 - URL Shortener
-**Files:** `ShortUrl.java`, `UrlShortenerController.java`
-**Concepts:** Code generation, redirect responses, click tracking
-**Go tip:** Use `http.Redirect(w, r, url, 302)` for redirects; `math/rand` for code gen.
-
-### 19 - Rate Limiter
-**Files:** `RateLimiter.java`, `RateLimiterController.java`
-**Concepts:** Sliding window algorithm, per-client state, `sync.Mutex`, 429 responses
-**Go tip:** Store timestamps as `[]time.Time`; use `sync.Mutex` to protect the slice.
-
-### 20 - Event Bus (Pub/Sub)
-**Files:** `Event.java`, `EventBusController.java`
-**Concepts:** Pub/sub pattern, topic routing, concurrent maps, event log
-**Go tip:** Use `sync.RWMutex` for subscriber maps; `map[string][]string` for topic→subs.
-
----
-
-## Recommended Go Stack
+Each project folder contains:
+- **Java reference** — One or more `.java` files with complete implementations
+- **Go scaffold** — `main.go` with struct definitions and function stubs (`panic("todo")`)
+- **Rust scaffold** — `rust/src/` with module files and function stubs (`todo!()`)
 
 ```
-Standard library only (projects 01–07):
-  net/http, encoding/json, sync, time, strings
-
-Add a router for cleaner path params (projects 08+):
-  github.com/go-chi/chi/v5   (lightweight, stdlib-compatible)
-  OR
-  github.com/gin-gonic/gin   (more Spring-like feel)
+NN-project-name/
+├── *.java              # Java reference implementation
+├── main.go             # Go scaffold (stdlib only)
+└── rust/
+    ├── Cargo.toml      # Rust dependencies
+    └── src/
+        ├── main.rs     # Entry point
+        └── *.rs        # Module files with todo!() stubs
 ```
+
+---
+
+## Concepts You'll Practice
+
+| Java                    | Go Equivalent                         | Rust Equivalent                         |
+|-------------------------|---------------------------------------|-----------------------------------------|
+| `class` + getters       | `struct` + exported fields            | `struct` + `impl` block                 |
+| `HashMap<K,V>`          | `map[K]V`                             | `HashMap<K,V>`                          |
+| `List<T>`               | `[]T` (slice)                         | `Vec<T>`                                |
+| `Optional`              | `(T, error)` multiple returns         | `Option<T>` / `Result<T,E>`            |
+| `ExecutorService`       | goroutines + `sync.WaitGroup`         | `tokio::spawn` / `std::thread`          |
+| `synchronized`          | `sync.Mutex` / `sync.RWMutex`        | `Mutex<T>` / `RwLock<T>` / `Arc`       |
+| `AtomicInteger`         | `sync/atomic`                         | `std::sync::atomic`                     |
+| `BlockingQueue`         | `chan T` (buffered channel)           | `mpsc::channel` / `mpsc::sync_channel` |
+| `HttpServer`            | `net/http`                            | `tokio` + `hyper`                       |
+| `Socket` / `ServerSocket` | `net.Dial` / `net.Listen`          | `tokio::net::TcpListener`              |
+
+---
+
+## Projects
+
+### 01 – Hello World API ✅
+**Type:** HTTP server · **Go:** ✅ · **Rust:** —
+Basic HTTP server with `/` and `/hello?name=` endpoints.
+
+### 02 – Calculator API ✅
+**Type:** HTTP server · **Go:** ✅ · **Rust:** ✅
+Arithmetic endpoints: add, subtract, multiply, divide with query params.
+
+### 03 – Todo List CRUD ✅
+**Type:** HTTP server · **Go:** ✅ · **Rust:** ✅
+Full CRUD API with in-memory map, JSON body, method routing.
+
+### 04 – Log Parser
+**Type:** CLI tool · **Go:** scaffold · **Rust:** ✅
+Parse log files with regex. Count by level, filter errors, extract unique paths.
+**Key concepts:** regex, file I/O, `HashMap` aggregation
+
+### 05 – Port Scanner
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Concurrent TCP port scanner with configurable host, port range, and concurrency.
+**Key concepts:** goroutines/`tokio::spawn`, `net.DialTimeout`/`TcpStream::connect`, semaphore pattern
+
+### 06 – JSON Config Merger
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Deep-merge multiple JSON config files left-to-right. Objects merge recursively, arrays replace, null removes.
+**Key concepts:** recursive data structures, `serde_json::Value`/`interface{}`, file I/O
+
+### 07 – Concurrent Downloader
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Download multiple URLs concurrently with a bounded worker pool. Track progress, save to disk.
+**Key concepts:** HTTP client, concurrency limiting (semaphore), file I/O, progress tracking
+
+### 08 – CLI Task Runner
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Parse `tasks.json` with dependencies, validate (cycle detection via DFS), run in topological order.
+**Key concepts:** JSON parsing, directed graph, topological sort, `os/exec`/`std::process::Command`
+
+### 09 – Markdown to HTML
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Tokenize Markdown (headings, lists, code blocks, blockquotes) and render to HTML with inline formatting.
+**Key concepts:** lexer/tokenizer pattern, regex, string building, HTML escaping
+
+### 10 – TCP Chat Server
+**Type:** TCP server · **Go:** scaffold · **Rust:** scaffold
+Multi-room chat over raw TCP. Commands: `/nick`, `/join`, `/leave`, `/rooms`, `/who`, `/quit`.
+**Key concepts:** `net.Listen`/`TcpListener`, goroutine-per-client, broadcast, `sync.RWMutex`/`RwLock`
+
+### 11 – Worker Pool
+**Type:** Library + demo · **Go:** scaffold · **Rust:** scaffold
+Generic thread/goroutine pool: submit jobs, workers pull from queue, collect results, poison-pill shutdown.
+**Key concepts:** `chan`/`mpsc`, `sync.WaitGroup`/`JoinHandle`, closure-based jobs
+
+### 12 – Rate Limiter
+**Type:** HTTP server · **Go:** scaffold · **Rust:** scaffold
+Per-client rate limiting with two algorithms: **Token Bucket** and **Sliding Window**. Returns `429` with `X-RateLimit-*` headers.
+**Key concepts:** time-based algorithms, per-client state (`map` + mutex), HTTP middleware
+
+### 13 – Event Emitter
+**Type:** Library + demo · **Go:** scaffold · **Rust:** scaffold
+Generic pub/sub emitter: `on`, `once`, `off`, `emit` with wildcard `*` support and auto-removal of one-shot listeners.
+**Key concepts:** callback patterns, generics/`interface{}`, ID-based listener management
+
+### 14 – HTTP Proxy
+**Type:** HTTP server · **Go:** scaffold · **Rust:** scaffold
+Reverse proxy with path-prefix rewrite rules, header copying, `X-Forwarded-For`, request/response logging, `502` on error.
+**Key concepts:** `net/http.Client`/`reqwest`, header manipulation, URL rewriting, error handling
+
+### 15 – CSV to JSON
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Parse CSV (quoted fields, custom delimiters), detect value types (int/float/bool/null), output as JSON objects or arrays.
+**Key concepts:** stateful line parser, type inference, `serde_json`/`encoding/json`
+
+### 16 – Cron Parser
+**Type:** CLI tool · **Go:** scaffold · **Rust:** scaffold
+Parse 5-field cron expressions (ranges, steps, lists, `@daily` shortcuts). Expand to sets, calculate next N execution times.
+**Key concepts:** string parsing, `HashSet`/`map[int]bool`, date/time iteration
+
+### 17 – KV Store ✅
+**Type:** TCP server · **Go:** scaffold · **Rust:** ✅
+Redis-like key-value store over TCP. Commands: `GET`, `SET`, `DELETE`, `KEYS`, `SAVE`, `LOAD`, `QUIT`. JSON persistence.
+**Key concepts:** TCP protocol, command parsing, `Arc<RwLock<Store>>`/`sync.RWMutex`, file-based persistence
+
+### 18 – Pipeline
+**Type:** Library + demo · **Go:** scaffold · **Rust:** scaffold
+Multi-stage concurrent data pipeline: source → filter → map → sink. Each stage runs in its own thread/goroutine, connected by channels.
+**Key concepts:** channels (`chan`/`mpsc`), close-to-signal-done, `JoinHandle`/`WaitGroup`, stage composition
+
+### 19 – Graceful Server
+**Type:** HTTP server · **Go:** scaffold · **Rust:** scaffold
+HTTP server with endpoints (`/health`, `/slow`, `/echo`), logger middleware, and graceful shutdown (drain in-flight requests, run cleanup hooks, timeout).
+**Key concepts:** `http.Server.Shutdown`/`hyper` graceful, `os/signal`/`tokio::signal`, `context.WithTimeout`
+
+### 20 – Load Balancer
+**Type:** HTTP server · **Go:** scaffold · **Rust:** scaffold
+HTTP load balancer with strategies (round-robin, least-connections, random), health checking, request forwarding, and `/lb/status` endpoint.
+**Key concepts:** `atomic` counters, background health check goroutine/task, strategy pattern, reverse proxying
+
+---
+
+## Status Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Fully implemented |
+| scaffold | Struct/function stubs with `panic("todo")` (Go) or `todo!()` (Rust) — ready for you to implement |
+| — | Not started / not applicable |
+
+---
+
+## Go Stack
+
+All Go projects use **stdlib only**:
+```
+net/http, net, encoding/json, sync, time, strings, regexp,
+os, os/exec, os/signal, bufio, strconv, fmt, io, context
+```
+
+## Rust Stack
+
+Rust dependencies vary per project (see each `Cargo.toml`):
+```
+Common:  tokio, serde, serde_json
+HTTP:    hyper, http-body-util, hyper-util, reqwest
+Other:   regex (04, 09)
+```
+
+All Rust projects are managed as a workspace — see root `Cargo.toml`.
 
 ## Getting Started
 
 ```bash
-# Create a new Go module for a project
-cd java-to-go-projects/01-hello-world
-go mod init hello-world
-touch main.go
-```
+# Run a Go project
+cd java-to-go-projects/04-log-parser
+go run main.go sample.log
 
-Each project should result in a single `main.go` (or a small package) that:
-1. Starts an HTTP server on port `8080`
-2. Implements the same endpoints as the Java version
-3. Uses in-memory storage (no database needed)
+# Run a Rust project
+cargo run --package log-parser
+
+# Check all Rust projects compile
+cargo check
+```
