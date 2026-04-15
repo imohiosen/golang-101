@@ -1,0 +1,8 @@
+[package]
+name = "lz4-arrow-compress"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+arrow = { version = "53", features = ["ipc"] }
+lz4_flex = "0.11"

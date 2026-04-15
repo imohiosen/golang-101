@@ -1,0 +1,8 @@
+[package]
+name = "io-uring-fileserver"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+io-uring = "0.7"
+nix = { version = "0.29", features = ["fs"] }

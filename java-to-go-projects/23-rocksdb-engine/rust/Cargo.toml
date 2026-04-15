@@ -1,0 +1,7 @@
+[package]
+name = "rocksdb-engine"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rocksdb = { version = "0.22", features = ["lz4"] }

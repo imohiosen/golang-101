@@ -142,6 +142,86 @@ HTTP load balancer with strategies (round-robin, least-connections, random), hea
 
 ---
 
+## Systems Library Projects (21–30)
+
+Projects 21–30 are **Go + Rust only** (no Java reference). Each focuses on a specific library/subsystem from a production fraud detection architecture:
+
+```
+CDC Ingestion → Kafka → Avro → RocksDB → Arrow → DataFusion → io_uring → NVMe
+```
+
+### 21 – Kafka Producer/Consumer
+**Type:** Streaming client · **Go:** scaffold · **Rust:** scaffold
+Producer with LZ4 batching, consumer group with manual offset commits, FraudEvent messages.
+**Go lib:** `segmentio/kafka-go` · **Rust lib:** `rdkafka`
+**Requires:** Running Kafka broker (KAFKA_BROKERS env var)
+
+### 22 – Avro Serde + Schema Evolution
+**Type:** Serialization library · **Go:** scaffold · **Rust:** scaffold
+Avro encode/decode with schema registry, backward-compatible evolution (v1→v2→v3), union types.
+**Go lib:** `linkedin/goavro/v2` · **Rust lib:** `apache-avro`
+
+### 23 – RocksDB Storage Engine
+**Type:** Embedded storage · **Go:** scaffold · **Rust:** scaffold
+Column families, atomic WriteBatch, range/prefix scans, snapshots, compaction, merge-on-read iterator.
+**Go lib:** `linxGnu/grocksdb` · **Rust lib:** `rocksdb`
+
+### 24 – Arrow Columnar Analytics
+**Type:** Data processing · **Go:** scaffold · **Rust:** scaffold
+Load CSV into RecordBatches, compute sum/avg/min/max, filter, group-by, write/read Arrow IPC files.
+**Go lib:** `apache/arrow/go` · **Rust lib:** `arrow-rs`
+
+### 25 – DataFusion SQL Queries
+**Type:** Query engine · **Go:** scaffold · **Rust:** scaffold
+Custom TableProvider (MemoryTable + FileTable), HybridTable merge-on-read, SQL queries via DataFusion.
+**Go lib:** `marcboeker/go-duckdb` · **Rust lib:** `datafusion`
+
+### 26 – io_uring File Server
+**Type:** Kernel I/O · **Go:** scaffold · **Rust:** scaffold
+Raw io_uring: SQE/CQE submission/completion, O_DIRECT reads, 4KB-aligned buffers, async file serving.
+**Go:** raw `syscall` (SYS_IO_URING_SETUP/ENTER) · **Rust lib:** `io-uring`
+
+### 27 – CPU Pinning + IO Priority
+**Type:** Systems benchmark · **Go:** scaffold · **Rust:** scaffold
+CPU topology detection, `sched_setaffinity`, IOPRIO_RT/IDLE, CorePool with architecture's core layout (0-5 RT, 6 batch, 7 freezer).
+**Go lib:** `golang.org/x/sys/unix` · **Rust lib:** `core_affinity` + `nix`
+
+### 28 – LZ4 + Arrow IPC Compression
+**Type:** Compression pipeline · **Go:** scaffold · **Rust:** scaffold
+LZ4 frame compress/decompress, Arrow IPC → LZ4 pipeline (the "background freezer"), throughput benchmarks.
+**Go lib:** `pierrec/lz4/v4` + `arrow/go` · **Rust lib:** `lz4_flex` + `arrow-rs`
+
+### 29 – Direct I/O + HugePages
+**Type:** Storage I/O · **Go:** scaffold · **Rust:** scaffold
+O_DIRECT write/read with 4KB-aligned buffers, HugePages allocation (2MB mmap), benchmark vs buffered I/O.
+**Go lib:** `syscall` (O_DIRECT, Mmap) · **Rust lib:** `nix` + `libc`
+
+### 30 – Glommio Thread-per-Core Server
+**Type:** TCP server · **Go:** scaffold · **Rust:** scaffold
+Thread-per-core TCP echo server. Rust uses Glommio LocalExecutor. Go approximates with SO_REUSEPORT + pinned OS threads.
+**Go:** `syscall` SO_REUSEPORT + `unix.SchedSetaffinity` · **Rust lib:** `glommio`
+
+---
+
+## Architecture Mapping
+
+After completing projects 21–30, every component in this architecture has been practiced:
+
+```
+[ Kafka ]           → Project 21
+[ Schema Registry ] → Project 22
+[ RocksDB LSM/WAL ] → Project 23
+[ Arrow IPC ]       → Projects 24, 28
+[ DataFusion SQL ]  → Project 25
+[ io_uring ]        → Project 26
+[ CPU Pinning ]     → Project 27
+[ LZ4 Compression ] → Project 28
+[ O_DIRECT/DMA ]    → Project 29
+[ Glommio ]         → Project 30
+```
+
+---
+
 ## Status Legend
 
 | Symbol | Meaning |

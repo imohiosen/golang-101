@@ -19,5 +19,15 @@ members = [
     "java-to-go-projects/18-pipeline/rust",
     "java-to-go-projects/19-graceful-server/rust",
     "java-to-go-projects/20-load-balancer/rust",
+    "java-to-go-projects/21-kafka-producer-consumer/rust",
+    "java-to-go-projects/22-avro-serde/rust",
+    "java-to-go-projects/23-rocksdb-engine/rust",
+    "java-to-go-projects/24-arrow-analytics/rust",
+    "java-to-go-projects/25-datafusion-queries/rust",
+    "java-to-go-projects/26-io-uring-fileserver/rust",
+    "java-to-go-projects/27-cpu-pinning-bench/rust",
+    "java-to-go-projects/28-lz4-arrow-compress/rust",
+    "java-to-go-projects/29-direct-io-writer/rust",
+    "java-to-go-projects/30-glommio-service/rust",
 ]
 resolver = "2"

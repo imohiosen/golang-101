@@ -1,0 +1,9 @@
+[package]
+name = "cpu-pinning-bench"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libc = "0.2"
+core_affinity = "0.8"
+nix = { version = "0.29", features = ["sched", "process"] }

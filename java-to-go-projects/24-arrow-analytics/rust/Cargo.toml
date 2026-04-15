@@ -1,0 +1,7 @@
+[package]
+name = "arrow-analytics"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+arrow = { version = "53", features = ["csv", "ipc"] }
