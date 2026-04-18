@@ -9,6 +9,15 @@ pub struct ScanResult {
 
 impl fmt::Display for ScanResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!()
+        fmt::write(
+            f,
+            format_args!(
+                "{}:{} is {} (latency: {} ms)",
+                self.host,
+                self.port,
+                if self.open { "open" } else { "closed" },
+                self.latency_ms
+            )
+        )
     }
 }
